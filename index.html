@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Learn Academy Dalkhola</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1208;
+    --cream: #f5f0e8;
+    --gold: #c8932a;
+    --gold-light: #e8b84b;
+    --rust: #8b3a1a;
+    --sage: #4a6741;
+    --paper: #faf7f2;
+    --border: #d4c9b0;
+    --shadow: rgba(26,18,8,0.12);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+    background: rgba(250,247,242,0.96);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 68px;
+  }
+
+  .nav-logo {
+    display: flex; align-items: center; gap: 12px; text-decoration: none;
+  }
+  .nav-logo-icon {
+    width: 42px; height: 42px;
+    background: var(--ink);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 900;
+    color: var(--gold);
+    letter-spacing: -1px;
+  }
+  .nav-logo-text { display: flex; flex-direction: column; }
+  .nav-logo-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px; font-weight: 700;
+    color: var(--ink); line-height: 1.1;
+  }
+  .nav-logo-sub {
+    font-size: 10px; font-weight: 500;
+    color: var(--gold); letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .nav-links {
+    display: flex; align-items: center; gap: 32px;
+    list-style: none;
+  }
+  .nav-links a {
+    text-decoration: none; color: var(--ink);
+    font-size: 14px; font-weight: 500;
+    letter-spacing: 0.3px;
+    position: relative; padding-bottom: 3px;
+    transition: color 0.2s;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: 0; left: 0;
+    width: 0; height: 1.5px;
+    background: var(--gold); transition: width 0.25s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a:hover::after { width: 100%; }
+
+  .nav-cta {
+    background: var(--ink); color: var(--cream) !important;
+    padding: 9px 22px !important;
+    border-radius: 6px;
+    font-weight: 600 !important;
+    transition: background 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--gold) !important; color: var(--ink) !important; }
+  .nav-cta::after { display: none !important; }
+
+  .hamburger {
+    display: none; flex-direction: column; gap: 5px; cursor: pointer;
+    padding: 4px;
+  }
+  .hamburger span {
+    width: 24px; height: 2px; background: var(--ink);
+    transition: all 0.3s;
+  }
+
+  /* ── SECTIONS ── */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* ── HERO ── */
+  #home {
+    min-height: 100vh;
+    padding-top: 68px;
+    display: none;
+    flex-direction: column;
+  }
+  #home.active { display: flex; }
+
+  .hero {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: calc(100vh - 68px);
+  }
+
+  .hero-left {
+    padding: 80px 5% 60px 8%;
+    display: flex; flex-direction: column; justify-content: center;
+    position: relative;
+  }
+  .hero-left::before {
+    content: '';
+    position: absolute; top: 0; right: 0; bottom: 0; width: 1px;
+    background: linear-gradient(to bottom, transparent, var(--border) 20%, var(--border) 80%, transparent);
+  }
+
+  .hero-eyebrow {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 28px;
+  }
+  .hero-eyebrow-line {
+    width: 40px; height: 2px; background: var(--gold);
+  }
+  .hero-eyebrow span {
+    font-size: 12px; font-weight: 600; letter-spacing: 2.5px;
+    text-transform: uppercase; color: var(--gold);
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(44px, 5vw, 72px);
+    font-weight: 900;
+    line-height: 1.05;
+    color: var(--ink);
+    margin-bottom: 24px;
+  }
+  .hero-title em {
+    font-style: italic; color: var(--gold);
+  }
+
+  .hero-desc {
+    font-size: 17px; line-height: 1.7;
+    color: #4a3f2f;
+    max-width: 480px;
+    margin-bottom: 44px;
+  }
+
+  .hero-actions {
+    display: flex; align-items: center; gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-size: 15px; font-weight: 600;
+    text-decoration: none;
+    cursor: pointer; border: none;
+    transition: all 0.2s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-primary:hover { background: var(--gold); color: var(--ink); transform: translateY(-2px); }
+
+  .btn-secondary {
+    color: var(--ink);
+    font-size: 15px; font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding-bottom: 2px;
+    border-bottom: 1.5px solid var(--border);
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+
+  .hero-stats {
+    display: flex; gap: 40px; margin-top: 60px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+  }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px; font-weight: 900;
+    color: var(--ink); line-height: 1;
+  }
+  .stat-num span { color: var(--gold); }
+  .stat-label {
+    font-size: 12px; font-weight: 500;
+    color: #7a6b55; letter-spacing: 0.5px;
+    margin-top: 4px;
+  }
+
+  .hero-right {
+    background: var(--ink);
+    display: flex; flex-direction: column;
+    padding: 80px 8% 60px 5%;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-right::before {
+    content: 'L';
+    position: absolute;
+    font-family: 'Playfair Display', serif;
+    font-size: 400px; font-weight: 900;
+    color: rgba(200,147,42,0.06);
+    top: -60px; right: -40px;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .hero-card {
+    background: rgba(245,240,232,0.06);
+    border: 1px solid rgba(200,147,42,0.25);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 16px;
+    position: relative; z-index: 1;
+    transition: border-color 0.2s, background 0.2s;
+    cursor: default;
+  }
+  .hero-card:hover {
+    border-color: var(--gold);
+    background: rgba(200,147,42,0.08);
+  }
+
+  .hero-card-icon {
+    font-size: 28px; margin-bottom: 12px;
+  }
+  .hero-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px; font-weight: 700;
+    color: var(--cream); margin-bottom: 8px;
+  }
+  .hero-card-text {
+    font-size: 13px; line-height: 1.6;
+    color: rgba(245,240,232,0.65);
+  }
+  .hero-card-badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--ink);
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 20px;
+    margin-top: 10px;
+  }
+
+  .hero-location {
+    margin-top: auto; padding-top: 32px;
+    display: flex; align-items: center; gap: 10px;
+    color: rgba(245,240,232,0.5);
+    font-size: 13px;
+    position: relative; z-index: 1;
+  }
+
+  /* ── PAGE HERO BANNER ── */
+  .page-banner {
+    padding: 120px 8% 60px;
+    background: var(--ink);
+    position: relative; overflow: hidden;
+  }
+  .page-banner::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+  }
+  .page-banner-eyebrow {
+    font-size: 11px; font-weight: 600; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 16px;
+  }
+  .page-banner-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 4vw, 58px); font-weight: 900;
+    color: var(--cream); line-height: 1.1;
+  }
+  .page-banner-sub {
+    font-size: 17px; color: rgba(245,240,232,0.6);
+    margin-top: 16px; max-width: 560px; line-height: 1.6;
+  }
+
+  /* ── ABOUT ── */
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 0;
+    padding: 80px 8%;
+  }
+  .about-content { padding-right: 60px; }
+  .section-eyebrow {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+  }
+  .section-eyebrow-line { width: 32px; height: 2px; background: var(--gold); }
+  .section-eyebrow span {
+    font-size: 11px; font-weight: 600; letter-spacing: 2.5px;
+    text-transform: uppercase; color: var(--gold);
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(30px, 3vw, 44px); font-weight: 900;
+    color: var(--ink); line-height: 1.15; margin-bottom: 20px;
+  }
+  .section-text {
+    font-size: 16px; line-height: 1.8; color: #4a3f2f; margin-bottom: 20px;
+  }
+
+  .about-founder {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    margin-top: 32px;
+    display: flex; gap: 20px; align-items: flex-start;
+  }
+  .founder-avatar {
+    width: 60px; height: 60px; border-radius: 50%;
+    background: var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 24px; font-weight: 900; color: var(--gold);
+    flex-shrink: 0;
+  }
+  .founder-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px; font-weight: 700; color: var(--ink);
+  }
+  .founder-role {
+    font-size: 12px; color: var(--gold); font-weight: 600;
+    letter-spacing: 1px; text-transform: uppercase; margin: 4px 0 8px;
+  }
+  .founder-quote {
+    font-size: 14px; line-height: 1.65; color: #5a4e3c; font-style: italic;
+  }
+
+  .about-values {
+    display: flex; flex-direction: column; gap: 20px;
+    padding-left: 60px;
+    border-left: 1px solid var(--border);
+  }
+  .value-card {
+    background: var(--cream); border: 1px solid var(--border);
+    border-radius: 10px; padding: 24px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .value-card:hover { border-color: var(--gold); transform: translateX(6px); }
+  .value-icon { font-size: 26px; margin-bottom: 10px; }
+  .value-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px; font-weight: 700; color: var(--ink); margin-bottom: 6px;
+  }
+  .value-text { font-size: 13px; line-height: 1.65; color: #5a4e3c; }
+
+  /* ── COURSES ── */
+  .courses-section { padding: 80px 8%; }
+  .courses-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 24px; margin-top: 48px;
+  }
+  .course-card {
+    background: var(--cream); border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden;
+    transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+  }
+  .course-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px var(--shadow);
+    border-color: var(--gold);
+  }
+  .course-card-header {
+    padding: 28px 24px 20px;
+    background: var(--ink);
+    position: relative;
+  }
+  .course-icon { font-size: 32px; margin-bottom: 12px; }
+  .course-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px; font-weight: 700; color: var(--cream);
+  }
+  .course-tag {
+    display: inline-block;
+    background: var(--gold); color: var(--ink);
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 20px; margin-top: 8px;
+  }
+  .course-card-body { padding: 24px; }
+  .course-desc {
+    font-size: 14px; line-height: 1.7; color: #5a4e3c; margin-bottom: 20px;
+  }
+  .course-features { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .course-features li {
+    font-size: 13px; color: var(--ink);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .course-features li::before {
+    content: '✓';
+    width: 18px; height: 18px;
+    background: var(--sage); color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700; flex-shrink: 0;
+  }
+  .course-enroll-btn {
+    margin-top: 24px; width: 100%;
+    background: var(--ink); color: var(--cream);
+    border: none; border-radius: 8px;
+    padding: 12px; font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: background 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .course-enroll-btn:hover { background: var(--gold); color: var(--ink); }
+
+  /* ── ADMISSION ── */
+  .admission-section { padding: 80px 8%; }
+  .admission-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 60px; margin-top: 48px; align-items: start;
+  }
+
+  .process-steps { display: flex; flex-direction: column; gap: 0; }
+  .step {
+    display: flex; gap: 20px;
+    position: relative;
+  }
+  .step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 19px; top: 48px; bottom: 0;
+    width: 2px; background: var(--border);
+  }
+  .step-num {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--ink); color: var(--gold);
+    font-family: 'Playfair Display', serif;
+    font-size: 16px; font-weight: 900;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; position: relative; z-index: 1;
+  }
+  .step-content { padding-bottom: 36px; }
+  .step-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px; font-weight: 700; color: var(--ink); margin-bottom: 6px;
+  }
+  .step-text { font-size: 14px; line-height: 1.65; color: #5a4e3c; }
+
+  /* FORM */
+  .enquiry-form {
+    background: var(--ink);
+    border-radius: 16px;
+    padding: 40px;
+  }
+  .form-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px; font-weight: 700; color: var(--cream);
+    margin-bottom: 6px;
+  }
+  .form-sub {
+    font-size: 14px; color: rgba(245,240,232,0.55); margin-bottom: 28px;
+  }
+  .form-group { margin-bottom: 18px; }
+  .form-label {
+    display: block; font-size: 12px; font-weight: 600;
+    color: var(--gold); letter-spacing: 1px;
+    text-transform: uppercase; margin-bottom: 6px;
+  }
+  .form-input, .form-select, .form-textarea {
+    width: 100%;
+    background: rgba(245,240,232,0.08);
+    border: 1px solid rgba(200,147,42,0.3);
+    border-radius: 8px; padding: 12px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; color: var(--cream);
+    outline: none; transition: border-color 0.2s;
+  }
+  .form-input::placeholder, .form-textarea::placeholder { color: rgba(245,240,232,0.3); }
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    border-color: var(--gold);
+    background: rgba(200,147,42,0.08);
+  }
+  .form-select { cursor: pointer; }
+  .form-select option { background: var(--ink); color: var(--cream); }
+  .form-textarea { resize: vertical; min-height: 90px; }
+  .form-submit {
+    width: 100%; background: var(--gold); color: var(--ink);
+    border: none; border-radius: 8px; padding: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px; font-weight: 700;
+    cursor: pointer; transition: opacity 0.2s, transform 0.2s;
+    margin-top: 6px;
+  }
+  .form-submit:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  .form-success {
+    display: none;
+    text-align: center; padding: 32px 0;
+  }
+  .form-success-icon { font-size: 48px; margin-bottom: 12px; }
+  .form-success-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 700; color: var(--cream); margin-bottom: 8px;
+  }
+  .form-success-text { font-size: 14px; color: rgba(245,240,232,0.65); }
+
+  /* ── CONTACT ── */
+  .contact-section { padding: 80px 8%; }
+  .contact-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 60px; margin-top: 48px;
+  }
+  .contact-info { display: flex; flex-direction: column; gap: 24px; }
+  .contact-item {
+    display: flex; gap: 16px; align-items: flex-start;
+    padding: 24px; background: var(--cream);
+    border: 1px solid var(--border); border-radius: 12px;
+    transition: border-color 0.2s;
+  }
+  .contact-item:hover { border-color: var(--gold); }
+  .contact-item-icon {
+    width: 44px; height: 44px; border-radius: 10px;
+    background: var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+  .contact-item-title {
+    font-size: 12px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 6px;
+  }
+  .contact-item-text {
+    font-size: 15px; color: var(--ink); line-height: 1.5;
+  }
+
+  .contact-map-block {
+    background: var(--ink); border-radius: 16px;
+    overflow: hidden; display: flex; flex-direction: column;
+  }
+  .map-placeholder {
+    flex: 1; min-height: 280px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    background: linear-gradient(135deg, #1a1208 0%, #2a1f0e 100%);
+    position: relative; overflow: hidden;
+    padding: 40px;
+  }
+  .map-placeholder::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle at 20% 50%, rgba(200,147,42,0.1) 0%, transparent 50%),
+                      radial-gradient(circle at 80% 20%, rgba(200,147,42,0.08) 0%, transparent 40%);
+  }
+  .map-pin { font-size: 48px; margin-bottom: 12px; position: relative; z-index: 1; }
+  .map-location-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px; font-weight: 700; color: var(--cream);
+    position: relative; z-index: 1; text-align: center;
+  }
+  .map-location-sub {
+    font-size: 13px; color: rgba(245,240,232,0.5);
+    margin-top: 6px; position: relative; z-index: 1; text-align: center;
+  }
+  .map-directions-btn {
+    display: block; text-align: center;
+    padding: 16px; background: var(--gold); color: var(--ink);
+    font-size: 14px; font-weight: 700; text-decoration: none;
+    transition: opacity 0.2s;
+    cursor: pointer;
+  }
+  .map-directions-btn:hover { opacity: 0.85; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink);
+    padding: 60px 8% 30px;
+    border-top: 1px solid rgba(200,147,42,0.2);
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr;
+    gap: 48px; padding-bottom: 40px;
+    border-bottom: 1px solid rgba(245,240,232,0.1);
+  }
+  .footer-brand-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 900; color: var(--cream);
+  }
+  .footer-brand-tagline {
+    font-size: 13px; color: rgba(245,240,232,0.45);
+    margin: 8px 0 20px; line-height: 1.6;
+  }
+  .footer-col-title {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 16px;
+  }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-links a {
+    font-size: 14px; color: rgba(245,240,232,0.55);
+    text-decoration: none; transition: color 0.2s;
+    cursor: pointer;
+  }
+  .footer-links a:hover { color: var(--gold); }
+  .footer-bottom {
+    padding-top: 28px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .footer-copy {
+    font-size: 13px; color: rgba(245,240,232,0.3);
+  }
+  .footer-gold { color: var(--gold); }
+
+  /* ── NOTICE BAND ── */
+  .notice-band {
+    background: var(--gold); color: var(--ink);
+    text-align: center; padding: 10px 5%;
+    font-size: 13px; font-weight: 600;
+    position: relative; z-index: 998;
+    top: 68px;
+  }
+  .notice-band a { color: var(--ink); text-decoration: underline; cursor: pointer; }
+
+  /* ── MOBILE ── */
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .hero-left { padding: 60px 6%; }
+    .about-grid { grid-template-columns: 1fr; }
+    .about-values { padding-left: 0; border-left: none; border-top: 1px solid var(--border); padding-top: 40px; }
+    .about-content { padding-right: 0; }
+    .courses-grid { grid-template-columns: 1fr; }
+    .admission-grid { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; flex-direction: column; position: fixed; top: 68px; left: 0; right: 0; background: var(--paper); border-bottom: 1px solid var(--border); padding: 20px 6%; gap: 16px; z-index: 998; }
+    .nav-links.open { display: flex; }
+    .hamburger { display: flex; }
+    .page-banner { padding: 100px 6% 50px; }
+  }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hero-left > * { animation: fadeUp 0.6s ease both; }
+  .hero-left > *:nth-child(1) { animation-delay: 0.1s; }
+  .hero-left > *:nth-child(2) { animation-delay: 0.2s; }
+  .hero-left > *:nth-child(3) { animation-delay: 0.3s; }
+  .hero-left > *:nth-child(4) { animation-delay: 0.4s; }
+  .hero-left > *:nth-child(5) { animation-delay: 0.5s; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" onclick="showPage('home')">
+    <div class="nav-logo-icon">L</div>
+    <div class="nav-logo-text">
+      <span class="nav-logo-name">Learn Academy</span>
+      <span class="nav-logo-sub">Dalkhola</span>
+    </div>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a onclick="showPage('home')">Home</a></li>
+    <li><a onclick="showPage('about')">About Us</a></li>
+    <li><a onclick="showPage('courses')">Courses</a></li>
+    <li><a onclick="showPage('admission')">Admission</a></li>
+    <li><a onclick="showPage('contact')">Contact</a></li>
+    <li><a class="nav-cta" onclick="showPage('admission')">Enroll Now</a></li>
+  </ul>
+  <div class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- NOTICE BAND -->
+<div class="notice-band" id="noticeBand">
+  🎓 Admissions open for 2025–26 session. <a onclick="showPage('admission')">Apply now →</a>
+</div>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- HOME -->
+<!-- ══════════════════════════════════════════════════ -->
+<section id="home" class="section active">
+  <div class="hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow">
+        <div class="hero-eyebrow-line"></div>
+        <span>Est. in Dalkhola, West Bengal</span>
+      </div>
+      <h1 class="hero-title">
+        Where Every<br><em>Student</em><br>Finds Their Path
+      </h1>
+      <p class="hero-desc">
+        Learn Academy Dalkhola offers expert coaching for Classes 1–12, Spoken English, UGC NET, IELTS, and D.El.Ed — nurturing students with personalised attention and proven results.
+      </p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="showPage('courses')">Explore Courses →</button>
+        <button class="btn-secondary" onclick="showPage('admission')">Enroll Now</button>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-num">1–12<span>th</span></div>
+          <div class="stat-label">All Classes</div>
+        </div>
+        <div>
+          <div class="stat-num">6<span>+</span></div>
+          <div class="stat-label">Programs</div>
+        </div>
+        <div>
+          <div class="stat-num">100<span>%</span></div>
+          <div class="stat-label">Dedication</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-card">
+        <div class="hero-card-icon">📚</div>
+        <div class="hero-card-title">Classes 1 – 12</div>
+        <div class="hero-card-text">Comprehensive subject coaching for all boards with expert faculty and regular assessments.</div>
+        <span class="hero-card-badge">Core Program</span>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-icon">🌐</div>
+        <div class="hero-card-title">Spoken English & IELTS</div>
+        <div class="hero-card-text">Build real-world English fluency and prepare for IELTS with structured, interactive sessions.</div>
+        <span class="hero-card-badge">High Demand</span>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-icon">🎓</div>
+        <div class="hero-card-title">UGC NET & D.El.Ed</div>
+        <div class="hero-card-text">Targeted preparation for UGC NET English and complete D.El.Ed programme support.</div>
+        <span class="hero-card-badge">Professional</span>
+      </div>
+      <div class="hero-location">
+        📍 Dalkhola, North Dinajpur, West Bengal
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- ABOUT -->
+<!-- ══════════════════════════════════════════════════ -->
+<section id="about" class="section">
+  <div class="page-banner">
+    <div class="page-banner-eyebrow">Our Story</div>
+    <h1 class="page-banner-title">About Learn Academy</h1>
+    <p class="page-banner-sub">A coaching centre built on the belief that every student deserves quality education, personalised attention, and a path forward.</p>
+  </div>
+
+  <div class="about-grid">
+    <div class="about-content">
+      <div class="section-eyebrow">
+        <div class="section-eyebrow-line"></div>
+        <span>Who We Are</span>
+      </div>
+      <h2 class="section-title">Education That Shapes Futures</h2>
+      <p class="section-text">Learn Academy Dalkhola was founded with a clear mission: to bring high-quality academic coaching to the students of North Dinajpur and surrounding regions. We bridge the gap between classroom learning and exam success, offering structured programmes designed for real outcomes.</p>
+      <p class="section-text">From foundational schooling support for Classes 1–12 to professional programmes like IELTS, UGC NET, and D.El.Ed, our faculty brings expertise, patience, and a genuine commitment to student growth.</p>
+
+      <div class="about-founder">
+        <div class="founder-avatar">A</div>
+        <div>
+          <div class="founder-name">Amit Kumar Gupta</div>
+          <div class="founder-role">Founder & Director</div>
+          <div class="founder-quote">"Education is not merely the acquisition of knowledge — it is the cultivation of the ability to think, question, and grow. Every student who walks through our doors carries potential that it is our privilege to unlock."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-values">
+      <div class="value-card">
+        <div class="value-icon">🎯</div>
+        <div class="value-title">Result-Oriented Teaching</div>
+        <div class="value-text">Our curriculum is structured around measurable outcomes — regular tests, progress reports, and targeted revision ensure every student improves consistently.</div>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">🤝</div>
+        <div class="value-title">Personalised Attention</div>
+        <div class="value-text">Small batch sizes and individual mentoring ensure no student is left behind. We adapt our teaching style to each learner's pace and needs.</div>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">🌱</div>
+        <div class="value-title">Holistic Development</div>
+        <div class="value-text">Beyond academics, we build confidence, communication skills, and critical thinking — qualities that matter as much as marks in the real world.</div>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">📍</div>
+        <div class="value-title">Community Rooted</div>
+        <div class="value-text">As a local institution, we deeply understand the aspirations of students and families in Dalkhola and North Dinajpur, and design our programmes accordingly.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- COURSES -->
+<!-- ══════════════════════════════════════════════════ -->
+<section id="courses" class="section">
+  <div class="page-banner">
+    <div class="page-banner-eyebrow">Our Programmes</div>
+    <h1 class="page-banner-title">Courses & Programs</h1>
+    <p class="page-banner-sub">Carefully designed programmes for every stage of your educational journey — school, competitive exams, language, and professional development.</p>
+  </div>
+
+  <div class="courses-section">
+    <div class="section-eyebrow">
+      <div class="section-eyebrow-line"></div>
+      <span>All Programs</span>
+    </div>
+    <h2 class="section-title">What We Offer</h2>
+
+    <div class="courses-grid">
+      <div class="course-card">
+        <div class="course-card-header">
+          <div class="course-icon">📚</div>
+          <div class="course-name">School Coaching (1–12)</div>
+          <span class="course-tag">All Boards</span>
+        </div>
+        <div class="course-card-body">
+          <p class="course-desc">Subject-wise expert coaching for students from Class 1 through Class 12, covering all major boards with regular assessments and report cards.</p>
+          <ul class="course-features">
+            <li>English, Mathematics, Science</li>
+            <li>Social Studies & Languages</li>
+            <li>Periodic tests & worksheets</li>
+            <li>AI-generated report cards</li>
+          </ul>
+          <button class="course-enroll-btn" onclick="showPage('admission')">Enroll in This Course</button>
+        </div>
+      </div>
+
+      <div class="course-card">
+        <div class="course-card-header">
+          <div class="course-icon">🗣️</div>
+          <div class="course-name">Spoken English</div>
+          <span class="course-tag">All Levels</span>
+        </div>
+        <div class="course-card-body">
+          <p class="course-desc">Build fluency, confidence, and real-world communication skills through structured conversation practice, grammar, and pronunciation training.</p>
+          <ul class="course-features">
+            <li>Beginner to Advanced levels</li>
+            <li>Grammar & vocabulary building</li>
+            <li>Conversation & debate practice</li>
+            <li>Pronunciation & accent training</li>
+          </ul>
+          <button class="course-enroll-btn" onclick="showPage('admission')">Enroll in This Course</button>
+        </div>
+      </div>
+
+      <div class="course-card">
+        <div class="course-card-header">
+          <div class="course-icon">✈️</div>
+          <div class="course-name">IELTS Coaching</div>
+          <span class="course-tag">General & Academic</span>
+        </div>
+        <div class="course-card-body">
+          <p class="course-desc">Targeted IELTS preparation covering all four modules — Listening, Reading, Writing, and Speaking — with full-length mock tests and feedback.</p>
+          <ul class="course-features">
+            <li>All 4 modules covered</li>
+            <li>Full mock test practice</li>
+            <li>Band-score strategy sessions</li>
+            <li>Speaking interview prep</li>
+          </ul>
+          <button class="course-enroll-btn" onclick="showPage('admission')">Enroll in This Course</button>
+        </div>
+      </div>
+
+      <div class="course-card">
+        <div class="course-card-header">
+          <div class="course-icon">🎓</div>
+          <div class="course-name">UGC NET English</div>
+          <span class="course-tag">Competitive Exam</span>
+        </div>
+        <div class="course-card-body">
+          <p class="course-desc">Comprehensive preparation for UGC NET English Literature using previous year questions (2004–2024), concept clarity, and exam strategy.</p>
+          <ul class="course-features">
+            <li>PYQ-based practice (2004–2024)</li>
+            <li>Shakespeare, Chaucer & more</li>
+            <li>Literary theory & criticism</li>
+            <li>Paper I (General) preparation</li>
+          </ul>
+          <button class="course-enroll-btn" onclick="showPage('admission')">Enroll in This Course</button>
+        </div>
+      </div>
+
+      <div class="course-card">
+        <div class="course-card-header">
+          <div class="course-icon">📝</div>
+          <div class="course-name">D.El.Ed Support</div>
+          <span class="course-tag">WB D.El.Ed</span>
+        </div>
+        <div class="course-card-body">
+          <p class="course-desc">Guidance and academic support for WB D.El.Ed students including lesson plan preparation, practicum support, and assignment help.</p>
+          <ul class="course-features">
+            <li>Lesson plan templates (NCFTE-2009)</li>
+            <li>Practicum & internship guidance</li>
+            <li>Assignment & project support</li>
+            <li>Exam preparation</li>
+          </ul>
+          <button class="course-enroll-btn" onclick="showPage('admission')">Enroll in This Course</button>
+        </div>
+      </div>
+
+      <div class="course-card">
+        <div class="course-card-header">
+          <div class="course-icon">⭐</div>
+          <div class="course-name">Personalised Tutoring</div>
+          <span class="course-tag">One-on-One</span>
+        </div>
+        <div class="course-card-body">
+          <p class="course-desc">Custom one-on-one sessions for students who need focused attention on specific subjects or exam preparation at their own pace.</p>
+          <ul class="course-features">
+            <li>Flexible scheduling</li>
+            <li>Customised study plan</li>
+            <li>Any subject / any grade</li>
+            <li>Progress tracked weekly</li>
+          </ul>
+          <button class="course-enroll-btn" onclick="showPage('admission')">Enroll in This Course</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- ADMISSION -->
+<!-- ══════════════════════════════════════════════════ -->
+<section id="admission" class="section">
+  <div class="page-banner">
+    <div class="page-banner-eyebrow">Join Us</div>
+    <h1 class="page-banner-title">Admission & Enrollment</h1>
+    <p class="page-banner-sub">Simple, straightforward admission process. Fill out the enquiry form and our team will get back to you within 24 hours.</p>
+  </div>
+
+  <div class="admission-section">
+    <div class="admission-grid">
+      <!-- Process -->
+      <div>
+        <div class="section-eyebrow">
+          <div class="section-eyebrow-line"></div>
+          <span>How to Enroll</span>
+        </div>
+        <h2 class="section-title">Simple Steps to<br>Get Started</h2>
+
+        <div class="process-steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-title">Submit Enquiry</div>
+              <div class="step-text">Fill out the enquiry form with your details and the course you're interested in. You can also call or visit us directly at our Dalkhola centre.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-title">Counselling Session</div>
+              <div class="step-text">Our team will schedule a free counselling session to understand your goals, current level, and recommend the most suitable programme for you.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-title">Confirm Enrollment</div>
+              <div class="step-text">Complete the admission formalities, submit your documents, and pay the course fee. You'll receive a fee receipt and your batch schedule.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <div class="step-title">Start Learning</div>
+              <div class="step-text">Join your batch and begin your journey. You'll get access to study materials, assessments, and ongoing support from our faculty.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div>
+        <div class="enquiry-form">
+          <div id="formContent">
+            <div class="form-title">Enquiry Form</div>
+            <div class="form-sub">We'll respond within 24 hours</div>
+
+            <div class="form-group">
+              <label class="form-label">Student Name *</label>
+              <input type="text" class="form-input" placeholder="Full name" id="f-name">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Class / Grade</label>
+              <select class="form-select" id="f-class">
+                <option value="">Select class / level</option>
+                <option>Class 1 – 5</option>
+                <option>Class 6 – 8</option>
+                <option>Class 9 – 10</option>
+                <option>Class 11 – 12</option>
+                <option>College / Graduate</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Course Interested In *</label>
+              <select class="form-select" id="f-course">
+                <option value="">Select a course</option>
+                <option>School Coaching (1–12)</option>
+                <option>Spoken English</option>
+                <option>IELTS Coaching</option>
+                <option>UGC NET English</option>
+                <option>D.El.Ed Support</option>
+                <option>Personalised Tutoring</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone Number *</label>
+              <input type="tel" class="form-input" placeholder="+91 XXXXX XXXXX" id="f-phone">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Message (Optional)</label>
+              <textarea class="form-textarea" placeholder="Any questions or details..." id="f-msg"></textarea>
+            </div>
+            <button class="form-submit" onclick="submitForm()">Submit Enquiry →</button>
+          </div>
+          <div class="form-success" id="formSuccess">
+            <div class="form-success-icon">✅</div>
+            <div class="form-success-title">Enquiry Received!</div>
+            <div class="form-success-text">Thank you. Our team will contact you within 24 hours to discuss your enrollment at Learn Academy Dalkhola.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- CONTACT -->
+<!-- ══════════════════════════════════════════════════ -->
+<section id="contact" class="section">
+  <div class="page-banner">
+    <div class="page-banner-eyebrow">Reach Us</div>
+    <h1 class="page-banner-title">Contact Us</h1>
+    <p class="page-banner-sub">We're here to answer your questions. Visit us, call us, or drop a message — we'd love to hear from you.</p>
+  </div>
+
+  <div class="contact-section">
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div class="contact-item">
+          <div class="contact-item-icon">📍</div>
+          <div>
+            <div class="contact-item-title">Address</div>
+            <div class="contact-item-text">Learn Academy Dalkhola<br>Dalkhola, North Dinajpur<br>West Bengal, India</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">📞</div>
+          <div>
+            <div class="contact-item-title">Phone</div>
+            <div class="contact-item-text">Call or WhatsApp us<br>for enquiries & admissions</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">🕒</div>
+          <div>
+            <div class="contact-item-title">Centre Hours</div>
+            <div class="contact-item-text">Monday – Saturday<br>9:00 AM – 7:00 PM</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">✉️</div>
+          <div>
+            <div class="contact-item-title">Quick Enquiry</div>
+            <div class="contact-item-text">Use our <a onclick="showPage('admission')" style="color:var(--gold);cursor:pointer;">online enquiry form</a> and we'll get back to you within 24 hours.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-map-block">
+        <div class="map-placeholder">
+          <div class="map-pin">📍</div>
+          <div class="map-location-name">Learn Academy Dalkhola</div>
+          <div class="map-location-sub">Dalkhola, North Dinajpur, West Bengal</div>
+        </div>
+        <a class="map-directions-btn" href="https://maps.google.com/?q=Dalkhola,+North+Dinajpur,+West+Bengal" target="_blank">
+          Get Directions on Google Maps →
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand-name">Learn Academy <span style="color:var(--gold)">Dalkhola</span></div>
+      <div class="footer-brand-tagline">Quality coaching for Classes 1–12, Spoken English, IELTS, UGC NET, and D.El.Ed in the heart of North Dinajpur, West Bengal.</div>
+    </div>
+    <div>
+      <div class="footer-col-title">Navigate</div>
+      <ul class="footer-links">
+        <li><a onclick="showPage('home')">Home</a></li>
+        <li><a onclick="showPage('about')">About Us</a></li>
+        <li><a onclick="showPage('courses')">Courses</a></li>
+        <li><a onclick="showPage('admission')">Admission</a></li>
+        <li><a onclick="showPage('contact')">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Programmes</div>
+      <ul class="footer-links">
+        <li><a onclick="showPage('courses')">School Coaching</a></li>
+        <li><a onclick="showPage('courses')">Spoken English</a></li>
+        <li><a onclick="showPage('courses')">IELTS Coaching</a></li>
+        <li><a onclick="showPage('courses')">UGC NET English</a></li>
+        <li><a onclick="showPage('courses')">D.El.Ed Support</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 Learn Academy Dalkhola. All rights reserved.</div>
+    <div class="footer-copy">Made with <span class="footer-gold">♥</span> in Dalkhola</div>
+  </div>
+</footer>
+
+<script>
+  function showPage(id) {
+    // Close mobile menu
+    document.getElementById('navLinks').classList.remove('open');
+
+    // Hide all sections
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+
+    // Show target
+    const target = document.getElementById(id);
+    target.classList.add('active');
+
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Notice band only on home
+    document.getElementById('noticeBand').style.display = id === 'home' ? 'block' : 'none';
+  }
+
+  function toggleMenu() {
+    document.getElementById('navLinks').classList.toggle('open');
+  }
+
+  function submitForm() {
+    const name = document.getElementById('f-name').value.trim();
+    const course = document.getElementById('f-course').value;
+    const phone = document.getElementById('f-phone').value.trim();
+
+    if (!name || !course || !phone) {
+      alert('Please fill in Name, Course, and Phone Number to submit.');
+      return;
+    }
+
+    document.getElementById('formContent').style.display = 'none';
+    document.getElementById('formSuccess').style.display = 'block';
+  }
+
+  // Course enroll buttons also navigate
+  document.querySelectorAll('.course-enroll-btn').forEach(btn => {
+    btn.addEventListener('click', () => showPage('admission'));
+  });
+</script>
+</body>
+</html>
