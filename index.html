@@ -10,356 +10,478 @@
 <style>
   :root {
     --navy: #0f1f3d;
+    --navy2: #1a3560;
     --gold: #c9963a;
     --gold-light: #e8b96a;
     --cream: #fdf8f0;
-    --cream-dark: #f5ede0;
+    --cream-dark: #f0e6d3;
     --text: #1a1a2e;
-    --muted: #6b7280;
+    --muted: #5c6370;
     --white: #ffffff;
     --radius: 14px;
-    --shadow: 0 4px 24px rgba(15,31,61,0.10);
+    --shadow: 0 6px 32px rgba(15,31,61,0.12);
+    --shadow-hover: 0 14px 40px rgba(15,31,61,0.18);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); line-height: 1.7; }
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--cream);
-    color: var(--text);
-    line-height: 1.7;
-  }
-
-  /* ── NAV ── */
+  /* ══════════════════════════════════════
+     STICKY NAV
+  ══════════════════════════════════════ */
   nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    background: rgba(253,248,240,0.95);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(201,150,58,0.18);
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    background: rgba(253,248,240,0.97);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(201,150,58,0.2);
     padding: 0 5%;
     display: flex; align-items: center; justify-content: space-between;
     height: 68px;
+    transition: box-shadow 0.3s;
   }
-  .nav-logo {
-    display: flex; align-items: center; gap: 12px;
-    text-decoration: none;
-  }
+  nav.scrolled { box-shadow: 0 2px 20px rgba(15,31,61,0.1); }
+  .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
   .logo-icon {
-    width: 40px; height: 40px;
-    background: var(--navy);
-    border-radius: 10px;
+    width: 40px; height: 40px; background: var(--navy); border-radius: 10px;
     display: flex; align-items: center; justify-content: center;
     font-size: 1.1rem; color: var(--gold); font-weight: 700;
     font-family: 'Playfair Display', serif;
   }
   .logo-text { font-size: 1rem; font-weight: 600; color: var(--navy); line-height: 1.2; }
   .logo-text span { display: block; font-size: 0.72rem; color: var(--gold); font-weight: 500; letter-spacing: 0.04em; }
-
   .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
-  .nav-links a {
-    text-decoration: none; color: var(--text);
-    font-size: 0.9rem; font-weight: 500;
-    transition: color 0.2s;
-  }
+  .nav-links a { text-decoration: none; color: var(--text); font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
   .nav-links a:hover { color: var(--gold); }
   .nav-cta {
     background: var(--navy); color: var(--white) !important;
-    padding: 9px 22px; border-radius: 8px;
-    font-weight: 600 !important;
+    padding: 9px 22px; border-radius: 8px; font-weight: 600 !important;
     transition: background 0.2s, transform 0.15s !important;
   }
   .nav-cta:hover { background: var(--gold) !important; transform: translateY(-1px); }
 
-  /* ── HERO ── */
+  /* hamburger */
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+  .hamburger span { width: 24px; height: 2px; background: var(--navy); border-radius: 2px; transition: all 0.3s; }
+  .mobile-menu {
+    display: none; position: fixed; top: 68px; left: 0; right: 0; z-index: 199;
+    background: var(--cream); border-bottom: 1px solid var(--cream-dark);
+    padding: 20px 5%; flex-direction: column; gap: 16px;
+    box-shadow: 0 8px 24px rgba(15,31,61,0.08);
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a { text-decoration: none; color: var(--text); font-weight: 500; font-size: 1rem; padding: 8px 0; border-bottom: 1px solid var(--cream-dark); }
+  .mobile-menu a:last-child { background: var(--navy); color: var(--white); text-align: center; padding: 12px; border-radius: 8px; border: none; }
+
+  /* ══════════════════════════════════════
+     HERO
+  ══════════════════════════════════════ */
   #home {
     min-height: 100vh;
     display: flex; align-items: center;
     padding: 100px 5% 60px;
-    background: linear-gradient(135deg, var(--navy) 0%, #1a3560 55%, #0d2847 100%);
     position: relative; overflow: hidden;
+    /* Layered: dark overlay → deep navy gradient → classroom bg image via Unsplash */
+    background:
+      linear-gradient(135deg, rgba(10,18,38,0.88) 0%, rgba(15,31,61,0.82) 50%, rgba(8,20,45,0.90) 100%),
+      url('https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=1600&q=80&fit=crop') center/cover no-repeat;
   }
+  /* animated radial glow orbs */
   #home::before {
-    content: '';
-    position: absolute; top: -120px; right: -80px;
-    width: 580px; height: 580px;
-    background: radial-gradient(circle, rgba(201,150,58,0.18) 0%, transparent 70%);
-    border-radius: 50%;
+    content: ''; position: absolute; top: -100px; right: -60px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(201,150,58,0.22) 0%, transparent 68%);
+    border-radius: 50%; animation: floatOrb 8s ease-in-out infinite;
   }
   #home::after {
-    content: '';
-    position: absolute; bottom: -80px; left: -60px;
-    width: 400px; height: 400px;
-    background: radial-gradient(circle, rgba(201,150,58,0.10) 0%, transparent 70%);
-    border-radius: 50%;
+    content: ''; position: absolute; bottom: -80px; left: -60px;
+    width: 420px; height: 420px;
+    background: radial-gradient(circle, rgba(201,150,58,0.12) 0%, transparent 70%);
+    border-radius: 50%; animation: floatOrb 11s ease-in-out infinite reverse;
   }
-  .hero-inner { max-width: 760px; position: relative; z-index: 1; }
+  @keyframes floatOrb { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-30px)} }
+
+  .hero-inner { max-width: 780px; position: relative; z-index: 1; }
+
   .hero-badge {
     display: inline-flex; align-items: center; gap: 8px;
-    background: rgba(201,150,58,0.15);
-    border: 1px solid rgba(201,150,58,0.35);
-    color: var(--gold-light);
-    padding: 6px 16px; border-radius: 40px;
+    background: rgba(201,150,58,0.15); border: 1px solid rgba(201,150,58,0.38);
+    color: var(--gold-light); padding: 6px 16px; border-radius: 40px;
     font-size: 0.82rem; font-weight: 500; letter-spacing: 0.04em;
-    margin-bottom: 28px;
+    margin-bottom: 28px; animation: fadeSlideUp 0.7s ease both;
   }
-  .hero-badge span { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; animation: pulse 2s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .hero-badge .dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
   #home h1 {
     font-family: 'Playfair Display', serif;
-    font-size: clamp(2.4rem, 5vw, 3.8rem);
-    color: var(--white); line-height: 1.18; margin-bottom: 22px;
+    font-size: clamp(2.5rem, 5.5vw, 4rem);
+    color: var(--white); line-height: 1.15; margin-bottom: 22px;
+    animation: fadeSlideUp 0.7s 0.1s ease both;
   }
   #home h1 em { color: var(--gold-light); font-style: italic; }
-  #home p {
-    color: rgba(255,255,255,0.75); font-size: 1.05rem;
-    max-width: 600px; margin-bottom: 40px;
+
+  .hero-desc {
+    color: rgba(255,255,255,0.78); font-size: 1.06rem;
+    max-width: 600px; margin-bottom: 36px;
+    animation: fadeSlideUp 0.7s 0.2s ease both;
   }
-  .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+
+  .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; animation: fadeSlideUp 0.7s 0.3s ease both; }
   .btn-primary {
     background: var(--gold); color: var(--navy);
-    padding: 13px 30px; border-radius: 9px;
-    font-weight: 700; font-size: 0.95rem;
-    text-decoration: none; transition: all 0.2s;
-    display: inline-block;
+    padding: 14px 32px; border-radius: 9px;
+    font-weight: 700; font-size: 0.95rem; text-decoration: none;
+    transition: all 0.22s; display: inline-block;
   }
-  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,150,58,0.35); }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 10px 28px rgba(201,150,58,0.4); }
   .btn-outline {
     background: transparent; color: var(--white);
-    padding: 13px 30px; border-radius: 9px;
-    border: 1.5px solid rgba(255,255,255,0.35);
-    font-weight: 600; font-size: 0.95rem;
-    text-decoration: none; transition: all 0.2s;
-    display: inline-block;
+    padding: 14px 32px; border-radius: 9px;
+    border: 1.5px solid rgba(255,255,255,0.38);
+    font-weight: 600; font-size: 0.95rem; text-decoration: none;
+    transition: all 0.22s; display: inline-block;
   }
   .btn-outline:hover { border-color: var(--gold-light); color: var(--gold-light); }
 
+  /* social proof */
+  .hero-proof {
+    margin-top: 18px; display: flex; align-items: center; gap: 12px;
+    animation: fadeSlideUp 0.7s 0.4s ease both;
+  }
+  .hero-proof .avatars { display: flex; }
+  .hero-proof .avatars span {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--navy2));
+    border: 2px solid rgba(255,255,255,0.4);
+    margin-left: -8px; first-child { margin-left: 0; }
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem; color: white; font-weight: 600;
+  }
+  .hero-proof .avatars span:first-child { margin-left: 0; }
+  .hero-proof p { color: rgba(255,255,255,0.7); font-size: 0.85rem; }
+  .hero-proof p strong { color: var(--gold-light); }
+
   .hero-stats {
-    display: flex; gap: 48px; margin-top: 64px;
+    display: flex; gap: 48px; margin-top: 60px;
     border-top: 1px solid rgba(255,255,255,0.12); padding-top: 40px;
+    animation: fadeSlideUp 0.7s 0.45s ease both;
   }
-  .stat-num {
-    font-family: 'Playfair Display', serif;
-    font-size: 2rem; color: var(--gold-light); font-weight: 700; line-height: 1;
-  }
-  .stat-label { font-size: 0.78rem; color: rgba(255,255,255,0.55); margin-top: 4px; letter-spacing: 0.05em; text-transform: uppercase; }
+  .stat-num { font-family: 'Playfair Display', serif; font-size: 2.1rem; color: var(--gold-light); font-weight: 700; line-height: 1; }
+  .stat-label { font-size: 0.75rem; color: rgba(255,255,255,0.52); margin-top: 5px; letter-spacing: 0.06em; text-transform: uppercase; }
 
-  /* ── SECTION SHELL ── */
+  @keyframes fadeSlideUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:none} }
+
+  /* ══════════════════════════════════════
+     SECTION SHELL
+  ══════════════════════════════════════ */
   section { padding: 96px 5%; }
-  .section-label {
-    font-size: 0.78rem; font-weight: 600; letter-spacing: 0.12em;
-    text-transform: uppercase; color: var(--gold);
-    margin-bottom: 14px;
-  }
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.9rem, 3.5vw, 2.7rem);
-    color: var(--navy); line-height: 1.25; margin-bottom: 16px;
-  }
-  .section-sub { color: var(--muted); font-size: 1.02rem; max-width: 600px; }
+  .section-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: clamp(1.9rem, 3.5vw, 2.8rem); color: var(--navy); line-height: 1.22; margin-bottom: 14px; }
+  .section-sub { color: var(--muted); font-size: 1rem; max-width: 580px; }
 
-  /* ── ABOUT ── */
+  /* ══════════════════════════════════════
+     ABOUT
+  ══════════════════════════════════════ */
   #about { background: var(--white); }
-  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; margin-top: 56px; }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; margin-top: 56px; }
+
+  .about-text p { color: var(--muted); font-size: 0.97rem; margin-bottom: 18px; line-height: 1.75; }
+
+  /* 2×2 icon pillars */
+  .pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 8px; }
+  .pillar {
+    background: var(--cream); border-radius: 12px;
+    padding: 22px 20px; border: 1px solid var(--cream-dark);
+    transition: all 0.25s;
+  }
+  .pillar:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: rgba(201,150,58,0.3); }
+  .pillar-icon { font-size: 1.6rem; margin-bottom: 10px; }
+  .pillar h4 { font-size: 0.88rem; font-weight: 700; color: var(--navy); margin-bottom: 5px; }
+  .pillar p { font-size: 0.8rem; color: var(--muted); line-height: 1.55; }
+
+  /* quote card */
   .about-quote-block {
     background: var(--navy); border-radius: var(--radius);
-    padding: 40px; color: var(--white);
+    padding: 44px 40px; color: var(--white);
     position: relative; overflow: hidden;
   }
   .about-quote-block::before {
-    content: '"'; position: absolute; top: -20px; left: 24px;
+    content: '"'; position: absolute; top: -28px; left: 20px;
     font-family: 'Playfair Display', serif;
-    font-size: 10rem; color: rgba(201,150,58,0.15); line-height: 1;
-    pointer-events: none;
+    font-size: 11rem; color: rgba(201,150,58,0.13); line-height: 1; pointer-events: none;
   }
   .about-quote-block blockquote {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.08rem; font-style: italic;
-    color: rgba(255,255,255,0.9); line-height: 1.75;
-    position: relative; z-index: 1;
+    font-family: 'Playfair Display', serif; font-size: 1.1rem; font-style: italic;
+    color: rgba(255,255,255,0.9); line-height: 1.78; position: relative; z-index: 1;
   }
-  .about-quote-block cite {
-    display: block; margin-top: 20px;
-    font-style: normal; font-size: 0.85rem;
-    color: var(--gold-light); font-weight: 600;
-  }
-  .pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  .pillar {
-    background: var(--cream); border-radius: 10px;
-    padding: 22px 20px; border: 1px solid var(--cream-dark);
-  }
-  .pillar-icon { font-size: 1.4rem; margin-bottom: 10px; }
-  .pillar h4 { font-size: 0.9rem; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
-  .pillar p { font-size: 0.82rem; color: var(--muted); line-height: 1.55; }
+  .about-quote-block cite { display: block; margin-top: 22px; font-style: normal; font-size: 0.86rem; color: var(--gold-light); font-weight: 600; }
 
-  /* ── COURSES ── */
+  /* photo strip */
+  .about-photos { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px; }
+  .about-photo {
+    border-radius: 10px; overflow: hidden; aspect-ratio: 4/3;
+    background: var(--cream-dark);
+  }
+  .about-photo img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s; }
+  .about-photo:hover img { transform: scale(1.05); }
+
+  /* ══════════════════════════════════════
+     COURSES
+  ══════════════════════════════════════ */
   #courses { background: var(--cream); }
   .courses-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
     gap: 24px; margin-top: 52px;
   }
   .course-card {
     background: var(--white); border-radius: var(--radius);
-    padding: 32px 28px; border: 1px solid var(--cream-dark);
-    transition: all 0.25s; position: relative; overflow: hidden;
+    border: 1px solid var(--cream-dark);
+    transition: all 0.28s; position: relative; overflow: hidden;
+    display: flex; flex-direction: column;
   }
+  /* photo header on card */
+  .course-img {
+    width: 100%; aspect-ratio: 16/8; overflow: hidden;
+    background: var(--cream-dark);
+  }
+  .course-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s; }
+  .course-card:hover .course-img img { transform: scale(1.06); }
+  .course-body { padding: 26px 24px; flex: 1; display: flex; flex-direction: column; }
+  /* animated bottom border on hover */
   .course-card::after {
     content: ''; position: absolute; bottom: 0; left: 0; right: 0;
-    height: 3px; background: var(--gold);
-    transform: scaleX(0); transform-origin: left;
-    transition: transform 0.3s;
+    height: 3px; background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    transform: scaleX(0); transform-origin: left; transition: transform 0.32s;
   }
-  .course-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
+  .course-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-hover); border-color: rgba(201,150,58,0.25); }
   .course-card:hover::after { transform: scaleX(1); }
-  .course-icon { font-size: 2rem; margin-bottom: 16px; }
+
   .course-tag {
-    display: inline-block; font-size: 0.7rem; font-weight: 600;
-    letter-spacing: 0.08em; text-transform: uppercase;
+    display: inline-block; font-size: 0.68rem; font-weight: 700;
+    letter-spacing: 0.09em; text-transform: uppercase;
     padding: 3px 10px; border-radius: 20px;
     background: rgba(201,150,58,0.12); color: var(--gold);
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
-  .course-card h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.2rem; color: var(--navy); margin-bottom: 10px;
-  }
-  .course-card p { font-size: 0.88rem; color: var(--muted); margin-bottom: 18px; line-height: 1.6; }
-  .course-list { list-style: none; margin-bottom: 24px; }
-  .course-list li {
-    font-size: 0.83rem; color: var(--text); padding: 4px 0;
-    padding-left: 16px; position: relative;
-  }
-  .course-list li::before {
-    content: '✓'; position: absolute; left: 0;
-    color: var(--gold); font-weight: 700; font-size: 0.78rem;
-  }
+  .course-body h3 { font-family: 'Playfair Display', serif; font-size: 1.18rem; color: var(--navy); margin-bottom: 8px; }
+  .course-body p { font-size: 0.86rem; color: var(--muted); margin-bottom: 16px; line-height: 1.62; flex: 1; }
+  .course-list { list-style: none; margin-bottom: 22px; }
+  .course-list li { font-size: 0.82rem; color: var(--text); padding: 4px 0; padding-left: 18px; position: relative; }
+  .course-list li::before { content: '✓'; position: absolute; left: 0; color: var(--gold); font-weight: 700; font-size: 0.78rem; }
   .course-btn {
     display: inline-block; text-decoration: none;
     font-size: 0.85rem; font-weight: 600; color: var(--navy);
-    border: 1.5px solid var(--navy); padding: 8px 18px;
-    border-radius: 7px; transition: all 0.2s;
+    border: 1.5px solid var(--navy); padding: 9px 20px;
+    border-radius: 8px; transition: all 0.2s; text-align: center;
   }
   .course-btn:hover { background: var(--navy); color: var(--white); }
 
-  /* ── CONTACT ── */
-  #contact { background: var(--white); }
-  .contact-grid { display: grid; grid-template-columns: 1fr 1.3fr; gap: 56px; margin-top: 52px; align-items: start; }
-  .contact-info { display: flex; flex-direction: column; gap: 24px; }
-  .contact-card {
-    background: var(--cream); border-radius: 12px;
-    padding: 22px 24px; display: flex; gap: 16px; align-items: flex-start;
-    border: 1px solid var(--cream-dark);
+  /* ══════════════════════════════════════
+     TESTIMONIALS
+  ══════════════════════════════════════ */
+  #testimonials { background: var(--navy); padding: 96px 5%; }
+  #testimonials .section-label { color: var(--gold-light); }
+  #testimonials .section-title { color: var(--white); }
+  #testimonials .section-sub { color: rgba(255,255,255,0.55); }
+
+  .testi-carousel { margin-top: 52px; position: relative; }
+  .testi-track { display: flex; gap: 24px; overflow: hidden; }
+  .testi-card {
+    background: rgba(255,255,255,0.06); border-radius: var(--radius);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 32px 28px; flex: 0 0 calc(33.33% - 16px);
+    transition: all 0.3s;
   }
+  .testi-card:hover { background: rgba(255,255,255,0.09); border-color: rgba(201,150,58,0.3); }
+  .testi-stars { color: var(--gold); font-size: 0.9rem; margin-bottom: 14px; letter-spacing: 2px; }
+  .testi-quote {
+    font-family: 'Playfair Display', serif; font-style: italic;
+    color: rgba(255,255,255,0.88); font-size: 0.98rem; line-height: 1.72; margin-bottom: 22px;
+  }
+  .testi-author { display: flex; align-items: center; gap: 12px; }
+  .testi-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--navy2));
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; color: white; font-size: 1rem; flex-shrink: 0;
+  }
+  .testi-name { font-weight: 600; font-size: 0.9rem; color: var(--white); }
+  .testi-role { font-size: 0.78rem; color: rgba(255,255,255,0.45); margin-top: 2px; }
+
+  .testi-controls { display: flex; gap: 12px; margin-top: 32px; justify-content: center; }
+  .testi-btn {
+    width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.25);
+    background: transparent; color: white; cursor: pointer; font-size: 1rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .testi-btn:hover { background: var(--gold); border-color: var(--gold); }
+
+  /* ══════════════════════════════════════
+     FAQ
+  ══════════════════════════════════════ */
+  #faq { background: var(--white); }
+  .faq-list { margin-top: 52px; max-width: 760px; display: flex; flex-direction: column; gap: 12px; }
+  .faq-item {
+    border: 1px solid var(--cream-dark); border-radius: 12px; overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .faq-item.open { border-color: rgba(201,150,58,0.4); }
+  .faq-q {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px 24px; cursor: pointer; background: var(--white);
+    transition: background 0.2s;
+  }
+  .faq-item.open .faq-q { background: var(--cream); }
+  .faq-q span { font-weight: 600; font-size: 0.97rem; color: var(--navy); }
+  .faq-icon {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--cream-dark); color: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; flex-shrink: 0; transition: all 0.3s;
+  }
+  .faq-item.open .faq-icon { background: var(--gold); color: white; transform: rotate(45deg); }
+  .faq-a {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.2s;
+    padding: 0 24px;
+    font-size: 0.9rem; color: var(--muted); line-height: 1.72;
+  }
+  .faq-item.open .faq-a { max-height: 300px; padding: 0 24px 20px; }
+
+  /* ══════════════════════════════════════
+     CONTACT
+  ══════════════════════════════════════ */
+  #contact { background: var(--cream); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1.3fr; gap: 56px; margin-top: 52px; align-items: start; }
+  .contact-info { display: flex; flex-direction: column; gap: 20px; }
+  .contact-card {
+    background: var(--white); border-radius: 12px;
+    padding: 22px 24px; display: flex; gap: 16px; align-items: flex-start;
+    border: 1px solid var(--cream-dark); transition: box-shadow 0.2s;
+  }
+  .contact-card:hover { box-shadow: var(--shadow); }
   .contact-card-icon { font-size: 1.5rem; flex-shrink: 0; margin-top: 2px; }
   .contact-card h4 { font-size: 0.88rem; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
   .contact-card p { font-size: 0.84rem; color: var(--muted); line-height: 1.55; }
-  .map-link {
-    display: inline-block; margin-top: 8px;
-    font-size: 0.82rem; font-weight: 600; color: var(--gold);
-    text-decoration: none;
-  }
+  .map-link { display: inline-block; margin-top: 8px; font-size: 0.82rem; font-weight: 600; color: var(--gold); text-decoration: none; }
   .map-link:hover { text-decoration: underline; }
 
-  .enquiry-form {
-    background: var(--navy); border-radius: var(--radius);
-    padding: 40px; color: var(--white);
-  }
-  .enquiry-form h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.4rem; margin-bottom: 6px; color: var(--white);
-  }
-  .enquiry-form p { font-size: 0.85rem; color: rgba(255,255,255,0.6); margin-bottom: 28px; }
-  .form-group { margin-bottom: 18px; }
-  .form-group label { display: block; font-size: 0.82rem; font-weight: 600; margin-bottom: 7px; color: rgba(255,255,255,0.8); }
+  /* form */
+  .enquiry-form { background: var(--navy); border-radius: var(--radius); padding: 40px; color: var(--white); }
+  .enquiry-form h3 { font-family: 'Playfair Display', serif; font-size: 1.45rem; margin-bottom: 6px; }
+  .enquiry-form > p { font-size: 0.85rem; color: rgba(255,255,255,0.55); margin-bottom: 28px; }
+  .form-group { margin-bottom: 16px; }
+  .form-group label { display: block; font-size: 0.81rem; font-weight: 600; margin-bottom: 7px; color: rgba(255,255,255,0.78); }
   .form-group input,
   .form-group select,
   .form-group textarea {
     width: 100%; padding: 11px 14px;
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.16);
     border-radius: 8px; color: var(--white);
     font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
-    transition: border-color 0.2s;
-    outline: none;
+    transition: border-color 0.2s; outline: none;
   }
-  .form-group select option { background: var(--navy); }
+  .form-group select option { background: var(--navy); color: white; }
   .form-group input:focus,
   .form-group select:focus,
-  .form-group textarea:focus { border-color: var(--gold); }
-  .form-group input::placeholder,
-  .form-group textarea::placeholder { color: rgba(255,255,255,0.35); }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-group textarea:focus { border-color: var(--gold); background: rgba(255,255,255,0.1); }
+  .form-group input::placeholder, .form-group textarea::placeholder { color: rgba(255,255,255,0.32); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   .btn-submit {
-    width: 100%; padding: 13px;
-    background: var(--gold); color: var(--navy);
+    width: 100%; padding: 14px; background: var(--gold); color: var(--navy);
     border: none; border-radius: 9px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.95rem; font-weight: 700;
-    cursor: pointer; transition: all 0.2s;
-    margin-top: 6px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 700;
+    cursor: pointer; transition: all 0.2s; margin-top: 8px;
   }
   .btn-submit:hover { background: var(--gold-light); transform: translateY(-1px); }
-  .success-msg {
-    display: none; text-align: center; padding: 24px;
-    color: var(--gold-light); font-size: 0.95rem;
-  }
+  .success-msg { display: none; text-align: center; padding: 32px 16px; }
+  .success-msg .success-icon { font-size: 2.5rem; margin-bottom: 12px; }
+  .success-msg h4 { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--gold-light); margin-bottom: 8px; }
+  .success-msg p { font-size: 0.88rem; color: rgba(255,255,255,0.6); }
 
-  /* ── FOOTER ── */
-  footer {
-    background: var(--navy); color: rgba(255,255,255,0.65);
-    padding: 64px 5% 36px;
+  /* ══════════════════════════════════════
+     FLOATING WHATSAPP BUTTON
+  ══════════════════════════════════════ */
+  .float-wa {
+    position: fixed; bottom: 28px; right: 28px; z-index: 300;
+    width: 58px; height: 58px; border-radius: 50%;
+    background: #25D366; box-shadow: 0 6px 24px rgba(37,211,102,0.45);
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; transition: all 0.25s;
+    animation: waPop 0.5s 1.5s cubic-bezier(0.34,1.56,0.64,1) both;
   }
-  .footer-grid {
-    display: grid; grid-template-columns: 1.6fr 1fr 1fr;
-    gap: 48px; margin-bottom: 48px;
+  .float-wa:hover { transform: scale(1.1); box-shadow: 0 10px 30px rgba(37,211,102,0.55); }
+  .float-wa svg { width: 30px; height: 30px; fill: white; }
+  .float-wa-label {
+    position: absolute; right: 68px; background: var(--navy); color: white;
+    white-space: nowrap; padding: 6px 14px; border-radius: 8px;
+    font-size: 0.8rem; font-weight: 600; opacity: 0; pointer-events: none;
+    transition: opacity 0.2s; box-shadow: var(--shadow);
   }
+  .float-wa:hover .float-wa-label { opacity: 1; }
+  @keyframes waPop { from{transform:scale(0);opacity:0} to{transform:scale(1);opacity:1} }
+
+  /* ══════════════════════════════════════
+     FOOTER
+  ══════════════════════════════════════ */
+  footer { background: var(--navy); color: rgba(255,255,255,0.6); padding: 64px 5% 36px; }
+  .footer-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
   .footer-brand .logo-text { color: var(--white); }
   .footer-brand .logo-text span { color: var(--gold); }
-  .footer-desc { font-size: 0.86rem; margin-top: 16px; line-height: 1.65; }
-  .footer-col h5 {
-    font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em;
-    text-transform: uppercase; color: var(--gold);
-    margin-bottom: 16px;
-  }
+  .footer-desc { font-size: 0.86rem; margin-top: 16px; line-height: 1.68; }
+  .footer-col h5 { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
   .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-  .footer-col ul li a {
-    text-decoration: none; color: rgba(255,255,255,0.6);
-    font-size: 0.88rem; transition: color 0.2s;
-  }
+  .footer-col ul li a { text-decoration: none; color: rgba(255,255,255,0.6); font-size: 0.88rem; transition: color 0.2s; }
   .footer-col ul li a:hover { color: var(--gold-light); }
-  .footer-bottom {
-    border-top: 1px solid rgba(255,255,255,0.1);
-    padding-top: 28px; text-align: center;
-    font-size: 0.82rem;
-  }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 28px; text-align: center; font-size: 0.82rem; }
   .footer-bottom span { color: var(--gold-light); }
 
-  /* ── RESPONSIVE ── */
+  /* ══════════════════════════════════════
+     SCROLL REVEAL
+  ══════════════════════════════════════ */
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.65s ease, transform 0.65s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* ══════════════════════════════════════
+     RESPONSIVE
+  ══════════════════════════════════════ */
+  @media (max-width: 1024px) {
+    .testi-card { flex: 0 0 calc(50% - 12px); }
+  }
   @media (max-width: 900px) {
     .about-grid, .contact-grid { grid-template-columns: 1fr; }
     .footer-grid { grid-template-columns: 1fr 1fr; }
     .hero-stats { gap: 32px; }
+    .testi-card { flex: 0 0 calc(50% - 12px); }
   }
   @media (max-width: 640px) {
     nav .nav-links { display: none; }
+    .hamburger { display: flex; }
     .pillars { grid-template-columns: 1fr; }
     .footer-grid { grid-template-columns: 1fr; }
     .form-row { grid-template-columns: 1fr; }
     .hero-stats { flex-wrap: wrap; gap: 28px; }
+    .testi-card { flex: 0 0 100%; }
+    .about-photos { grid-template-columns: 1fr; }
+    .float-wa { bottom: 20px; right: 20px; width: 52px; height: 52px; }
   }
-
-  /* ── SCROLL REVEAL ── */
-  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
-  .reveal.visible { opacity: 1; transform: none; }
 </style>
 </head>
 <body>
 
+<!-- ══ FLOATING WHATSAPP ══ -->
+<a href="https://wa.me/91XXXXXXXXXX" target="_blank" class="float-wa" aria-label="Chat on WhatsApp">
+  <span class="float-wa-label">Chat with us</span>
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+</a>
+
 <!-- ══ NAV ══ -->
-<nav>
+<nav id="main-nav">
   <a href="#home" class="nav-logo">
     <div class="logo-icon">L</div>
     <div class="logo-text">Learn Academy <span>Dalkhola</span></div>
@@ -368,24 +490,51 @@
     <li><a href="#home">Home</a></li>
     <li><a href="#about">About Us</a></li>
     <li><a href="#courses">Courses</a></li>
+    <li><a href="#testimonials">Reviews</a></li>
+    <li><a href="#faq">FAQ</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#contact" class="nav-cta">Enroll Now</a></li>
   </ul>
+  <div class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </div>
 </nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#home" onclick="toggleMenu()">Home</a>
+  <a href="#about" onclick="toggleMenu()">About Us</a>
+  <a href="#courses" onclick="toggleMenu()">Courses</a>
+  <a href="#testimonials" onclick="toggleMenu()">Reviews</a>
+  <a href="#faq" onclick="toggleMenu()">FAQ</a>
+  <a href="#contact" onclick="toggleMenu()">Contact</a>
+  <a href="#contact" onclick="toggleMenu()">Enroll Now →</a>
+</div>
 
 <!-- ══ HERO ══ -->
 <section id="home">
   <div class="hero-inner">
-    <div class="hero-badge"><span></span> Admissions open for 2025–26 session. Apply now →</div>
+    <div class="hero-badge"><span class="dot"></span> Admissions open for 2025–26 session. Apply now →</div>
+
     <h1>Where Every <em>Student</em><br>Finds Their Path</h1>
-    <p>Learn Academy Dalkhola offers expert coaching for Classes 1–12, Spoken English, UGC NET, IELTS, CTET, and D.El.Ed — nurturing students with personalised attention and proven results.</p>
+
+    <p class="hero-desc">Learn Academy Dalkhola offers expert coaching for Classes 1–12, Spoken English, IELTS, CTET, and D.El.Ed — nurturing students with personalised attention and proven results.</p>
+
     <div class="hero-btns">
       <a href="#courses" class="btn-primary">Explore Courses →</a>
       <a href="#contact" class="btn-outline">Enroll Now</a>
     </div>
+
+    <!-- Social Proof -->
+    <div class="hero-proof">
+      <div class="avatars">
+        <span>AK</span><span>PM</span><span>SR</span><span>RD</span>
+      </div>
+      <p>Join <strong>500+ successful students</strong> in North Dinajpur</p>
+    </div>
+
     <div class="hero-stats">
       <div><div class="stat-num">1–12</div><div class="stat-label">All Classes</div></div>
       <div><div class="stat-num">7+</div><div class="stat-label">Programs</div></div>
+      <div><div class="stat-num">500+</div><div class="stat-label">Students</div></div>
       <div><div class="stat-num">100%</div><div class="stat-label">Dedication</div></div>
     </div>
   </div>
@@ -398,17 +547,26 @@
   <div class="section-sub">A coaching centre built on the belief that every student deserves quality education, personalised attention, and a path forward.</div>
 
   <div class="about-grid reveal">
-    <div>
+    <div class="about-text">
       <h2 style="font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--navy);margin-bottom:18px;line-height:1.3;">Education That Shapes Futures</h2>
-      <p style="color:var(--muted);font-size:0.96rem;margin-bottom:20px;">Learn Academy Dalkhola was founded with a clear mission: to bring high-quality academic coaching to the students of North Dinajpur and surrounding regions. We bridge the gap between classroom learning and exam success, offering structured programmes designed for real outcomes.</p>
-      <p style="color:var(--muted);font-size:0.96rem;margin-bottom:32px;">From foundational schooling support for Classes 1–12 to professional programmes like IELTS, UGC NET, CTET, and D.El.Ed, our faculty brings expertise, patience, and a genuine commitment to student growth.</p>
+      <p>Learn Academy Dalkhola was founded with a clear mission: to bring high-quality academic coaching to the students of North Dinajpur and surrounding regions. We bridge the gap between classroom learning and exam success, offering structured programmes designed for real outcomes.</p>
+      <p>From foundational schooling support for Classes 1–12 to professional programmes like IELTS, CTET, and D.El.Ed, our faculty brings expertise, patience, and a genuine commitment to student growth.</p>
+
+      <!-- 2×2 icon pillars -->
       <div class="pillars">
         <div class="pillar"><div class="pillar-icon">🎯</div><h4>Result-Oriented Teaching</h4><p>Regular tests, progress reports, and targeted revision ensure every student improves consistently.</p></div>
         <div class="pillar"><div class="pillar-icon">🤝</div><h4>Personalised Attention</h4><p>Small batch sizes and individual mentoring ensure no student is left behind.</p></div>
         <div class="pillar"><div class="pillar-icon">🌱</div><h4>Holistic Development</h4><p>Beyond academics, we build confidence, communication skills, and critical thinking.</p></div>
-        <div class="pillar"><div class="pillar-icon">📍</div><h4>Community Rooted</h4><p>We deeply understand the aspirations of students and families in Dalkhola and North Dinajpur.</p></div>
+        <div class="pillar"><div class="pillar-icon">📍</div><h4>Community Rooted</h4><p>We deeply understand the aspirations of students and families across Dalkhola and North Dinajpur.</p></div>
+      </div>
+
+      <!-- Photo strip -->
+      <div class="about-photos">
+        <div class="about-photo"><img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=600&q=75&fit=crop" alt="Students studying" loading="lazy" /></div>
+        <div class="about-photo"><img src="https://images.unsplash.com/photo-1544717305-2782549b5136?w=600&q=75&fit=crop" alt="Classroom session" loading="lazy" /></div>
       </div>
     </div>
+
     <div class="about-quote-block">
       <blockquote>"Education is not merely the acquisition of knowledge — it is the cultivation of the ability to think, question, and grow. Every student who walks through our doors carries potential that it is our privilege to unlock."</blockquote>
       <cite>— Amit Kumar Gupta, Founder &amp; Director</cite>
@@ -424,94 +582,221 @@
 
   <div class="courses-grid">
 
-    <!-- School Coaching -->
     <div class="course-card reveal">
-      <div class="course-icon">📚</div>
-      <div class="course-tag">All Boards</div>
-      <h3>School Coaching (1–12)</h3>
-      <p>Subject-wise expert coaching for students from Class 1 through Class 12, covering all major boards with regular assessments and report cards.</p>
-      <ul class="course-list">
-        <li>English, Mathematics, Science</li>
-        <li>Social Studies &amp; Languages</li>
-        <li>Periodic tests &amp; worksheets</li>
-        <li>AI-generated report cards</li>
-      </ul>
-      <a href="#contact" class="course-btn">Enroll in This Course</a>
+      <div class="course-img"><img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&q=70&fit=crop" alt="School coaching" loading="lazy" /></div>
+      <div class="course-body">
+        <div class="course-tag">All Boards</div>
+        <h3>School Coaching (1–12)</h3>
+        <p>Subject-wise expert coaching for Classes 1–12 across all major boards, with regular assessments, worksheets, and AI-generated report cards.</p>
+        <ul class="course-list">
+          <li>English, Mathematics, Science</li>
+          <li>Social Studies &amp; Languages</li>
+          <li>Periodic tests &amp; worksheets</li>
+          <li>AI-generated report cards</li>
+        </ul>
+        <a href="#contact" class="course-btn">Enroll in This Course</a>
+      </div>
     </div>
 
-    <!-- Spoken English -->
     <div class="course-card reveal">
-      <div class="course-icon">🗣️</div>
-      <div class="course-tag">All Levels</div>
-      <h3>Spoken English</h3>
-      <p>Build fluency, confidence, and real-world communication skills through structured conversation practice, grammar, and pronunciation training.</p>
-      <ul class="course-list">
-        <li>Beginner to Advanced levels</li>
-        <li>Grammar &amp; vocabulary building</li>
-        <li>Conversation &amp; debate practice</li>
-        <li>Pronunciation &amp; accent training</li>
-      </ul>
-      <a href="#contact" class="course-btn">Enroll in This Course</a>
+      <div class="course-img"><img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?w=600&q=70&fit=crop" alt="Spoken English" loading="lazy" /></div>
+      <div class="course-body">
+        <div class="course-tag">All Levels</div>
+        <h3>Spoken English</h3>
+        <p>Build fluency, confidence, and real-world communication skills through structured conversation practice, grammar, and pronunciation training.</p>
+        <ul class="course-list">
+          <li>Beginner to Advanced levels</li>
+          <li>Grammar &amp; vocabulary building</li>
+          <li>Conversation &amp; debate practice</li>
+          <li>Pronunciation &amp; accent training</li>
+        </ul>
+        <a href="#contact" class="course-btn">Enroll in This Course</a>
+      </div>
     </div>
 
-    <!-- IELTS -->
     <div class="course-card reveal">
-      <div class="course-icon">✈️</div>
-      <div class="course-tag">General &amp; Academic</div>
-      <h3>IELTS Coaching</h3>
-      <p>Targeted IELTS preparation covering all four modules — Listening, Reading, Writing, and Speaking — with full-length mock tests and feedback.</p>
-      <ul class="course-list">
-        <li>All 4 modules covered</li>
-        <li>Full mock test practice</li>
-        <li>Band-score strategy sessions</li>
-        <li>Speaking interview prep</li>
-      </ul>
-      <a href="#contact" class="course-btn">Enroll in This Course</a>
+      <div class="course-img"><img src="https://images.unsplash.com/photo-1434030216411-0b793f4b6f6d?w=600&q=70&fit=crop" alt="IELTS coaching" loading="lazy" /></div>
+      <div class="course-body">
+        <div class="course-tag">General &amp; Academic</div>
+        <h3>IELTS Coaching</h3>
+        <p>Targeted preparation covering all four modules — Listening, Reading, Writing, and Speaking — with full-length mock tests and band-score strategies.</p>
+        <ul class="course-list">
+          <li>All 4 modules covered</li>
+          <li>Full mock test practice</li>
+          <li>Band-score strategy sessions</li>
+          <li>Speaking interview prep</li>
+        </ul>
+        <a href="#contact" class="course-btn">Enroll in This Course</a>
+      </div>
     </div>
 
-    <!-- CTET Paper I & II — NEW CARD -->
     <div class="course-card reveal">
-      <div class="course-icon">📝</div>
-      <div class="course-tag">Paper I &amp; Paper II</div>
-      <h3>CTET Preparation</h3>
-      <p>Comprehensive preparation for both CTET Paper I (Classes 1–5) and Paper II (Classes 6–8), covering child development, pedagogy, language, and subject content.</p>
-      <ul class="course-list">
-        <li>Child Development &amp; Pedagogy</li>
-        <li>Language I &amp; II (Hindi / English)</li>
-        <li>Mathematics &amp; Environmental Studies (Paper I)</li>
-        <li>Subject Content: Science / Social Studies (Paper II)</li>
-      </ul>
-      <a href="#contact" class="course-btn">Enroll in This Course</a>
+      <div class="course-img"><img src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&q=70&fit=crop" alt="CTET preparation" loading="lazy" /></div>
+      <div class="course-body">
+        <div class="course-tag">Paper I &amp; Paper II</div>
+        <h3>CTET Preparation</h3>
+        <p>Comprehensive preparation for CTET Paper I (Classes 1–5) and Paper II (Classes 6–8) — child development, pedagogy, language, and subject content.</p>
+        <ul class="course-list">
+          <li>Child Development &amp; Pedagogy</li>
+          <li>Language I &amp; II (Hindi / English)</li>
+          <li>Maths &amp; EVS — Paper I</li>
+          <li>Science / Social Studies — Paper II</li>
+        </ul>
+        <a href="#contact" class="course-btn">Enroll in This Course</a>
+      </div>
     </div>
 
-    <!-- D.El.Ed -->
     <div class="course-card reveal">
-      <div class="course-icon">🎓</div>
-      <div class="course-tag">WB D.El.Ed</div>
-      <h3>D.El.Ed Support</h3>
-      <p>Guidance and academic support for WB D.El.Ed students including lesson plan preparation, practicum support, and assignment help.</p>
-      <ul class="course-list">
-        <li>Lesson plan templates (NCFTE-2009)</li>
-        <li>Practicum &amp; internship guidance</li>
-        <li>Assignment &amp; project support</li>
-        <li>Exam preparation</li>
-      </ul>
-      <a href="#contact" class="course-btn">Enroll in This Course</a>
+      <div class="course-img"><img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=600&q=70&fit=crop" alt="D.El.Ed support" loading="lazy" /></div>
+      <div class="course-body">
+        <div class="course-tag">WB D.El.Ed</div>
+        <h3>D.El.Ed Support</h3>
+        <p>Guidance for WB D.El.Ed students including lesson plan preparation, practicum support, assignments, and examination help.</p>
+        <ul class="course-list">
+          <li>Lesson plan templates (NCFTE-2009)</li>
+          <li>Practicum &amp; internship guidance</li>
+          <li>Assignment &amp; project support</li>
+          <li>Exam preparation</li>
+        </ul>
+        <a href="#contact" class="course-btn">Enroll in This Course</a>
+      </div>
     </div>
 
-    <!-- Personalised Tutoring -->
     <div class="course-card reveal">
-      <div class="course-icon">⭐</div>
-      <div class="course-tag">One-on-One</div>
-      <h3>Personalised Tutoring</h3>
-      <p>Custom one-on-one sessions for students who need focused attention on specific subjects or exam preparation at their own pace.</p>
-      <ul class="course-list">
-        <li>Flexible scheduling</li>
-        <li>Customised study plan</li>
-        <li>Any subject / any grade</li>
-        <li>Progress tracked weekly</li>
-      </ul>
-      <a href="#contact" class="course-btn">Enroll in This Course</a>
+      <div class="course-img"><img src="https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=600&q=70&fit=crop" alt="Personalised tutoring" loading="lazy" /></div>
+      <div class="course-body">
+        <div class="course-tag">One-on-One</div>
+        <h3>Personalised Tutoring</h3>
+        <p>Custom one-on-one sessions for students who need focused attention on specific subjects or exam preparation at their own pace.</p>
+        <ul class="course-list">
+          <li>Flexible scheduling</li>
+          <li>Customised study plan</li>
+          <li>Any subject / any grade</li>
+          <li>Progress tracked weekly</li>
+        </ul>
+        <a href="#contact" class="course-btn">Enroll in This Course</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ TESTIMONIALS ══ -->
+<section id="testimonials">
+  <div class="section-label">Success Stories</div>
+  <div class="section-title" style="color:var(--white);">What Our Students Say</div>
+  <div class="section-sub">Real words from students who walked through our doors and found their path.</div>
+
+  <div class="testi-carousel reveal">
+    <div class="testi-track" id="testi-track">
+
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">"Learn Academy completely transformed my English communication. Within three months I could speak confidently in interviews. The teachers are patient and genuinely invested in your growth."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">PM</div>
+          <div><div class="testi-name">Priya Mandal</div><div class="testi-role">Spoken English — now working in Siliguri</div></div>
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">"I cleared my CTET Paper I in the first attempt after joining here. The structured notes and mock tests made a huge difference. Amit Sir explains every concept with great clarity."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">SR</div>
+          <div><div class="testi-name">Sourav Roy</div><div class="testi-role">CTET Paper I — cleared first attempt</div></div>
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">"My son struggled with Maths in Class 9 and lost confidence. After two months at Learn Academy, his score jumped from 42 to 84. The personalised attention is what made the difference."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">RD</div>
+          <div><div class="testi-name">Rekha Dey</div><div class="testi-role">Parent — Class 9 student</div></div>
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">"I got a Band 7 in IELTS on my first attempt. The mock tests here are incredibly realistic. The speaking module coaching especially helped me get over my nervousness."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">AK</div>
+          <div><div class="testi-name">Arjun Kundu</div><div class="testi-role">IELTS — Band 7, now studying in Canada</div></div>
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">"The D.El.Ed support here is unmatched. Lesson plan formats, practicum guidance — everything was explained step by step. I never felt lost even though I was studying alongside a job."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">NB</div>
+          <div><div class="testi-name">Nilima Biswas</div><div class="testi-role">D.El.Ed student — Dalkhola</div></div>
+        </div>
+      </div>
+
+    </div>
+    <div class="testi-controls">
+      <button class="testi-btn" onclick="slideTestis(-1)">&#8592;</button>
+      <button class="testi-btn" onclick="slideTestis(1)">&#8594;</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FAQ ══ -->
+<section id="faq">
+  <div class="section-label">Common Questions</div>
+  <div class="section-title">Frequently Asked Questions</div>
+  <div class="section-sub">Everything you need to know before joining Learn Academy Dalkhola.</div>
+
+  <div class="faq-list reveal">
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span>What are the batch timings at Learn Academy?</span>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-a">We run morning, afternoon, and evening batches to suit school-going students, working professionals, and college students. Typical slots are 7–9 AM, 12–2 PM, and 5–7 PM. Exact timings are confirmed at enrollment based on your availability.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span>What are the course fees? Are there any concessions?</span>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-a">Fees vary by programme and batch size. We offer merit-based concessions and sibling discounts. Please contact us directly or submit an enquiry to receive a personalised fee structure. We believe no deserving student should be turned away due to financial constraints.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span>Do you provide study materials?</span>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-a">Yes. All students receive curated notes, worksheets, and previous year question papers relevant to their course. For UGC NET and CTET, we provide PYQ-based practice sets (2004–2024). IELTS students get full-length mock tests modelled on real exam formats.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span>Can I enroll in more than one course simultaneously?</span>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-a">Absolutely. Many students combine School Coaching with Spoken English, or D.El.Ed support with CTET preparation. We help you build a non-conflicting timetable. A small combo discount may also apply — ask us during counselling.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span>Is there an online learning option available?</span>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-a">We currently operate primarily as an in-person centre at Dalkhola. However, hybrid options (recorded sessions + WhatsApp support) are available for students who cannot attend in person on certain days. Enquire with us for details.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span>How do I enroll? What documents are needed?</span>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-a">Fill out our online enquiry form or visit us directly at our Dalkhola centre. Documents typically required: a passport-sized photo, a copy of your last marksheet or admit card, and an Aadhaar card for identity. Enrollment is confirmed on payment of the first installment.</div>
     </div>
 
   </div>
@@ -536,8 +821,8 @@
       <div class="contact-card">
         <div class="contact-card-icon">📞</div>
         <div>
-          <h4>Phone</h4>
-          <p>Call or WhatsApp us for enquiries &amp; admissions</p>
+          <h4>Phone &amp; WhatsApp</h4>
+          <p>Call or WhatsApp us for enquiries &amp; admissions. Available Mon–Sat, 9 AM–7 PM.</p>
         </div>
       </div>
       <div class="contact-card">
@@ -559,9 +844,15 @@
             <input type="text" placeholder="Full name" id="f-name" />
           </div>
           <div class="form-group">
+            <label>Phone Number *</label>
+            <input type="tel" placeholder="+91 XXXXX XXXXX" id="f-phone" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
             <label>Class / Grade</label>
             <select id="f-class">
-              <option value="">Select class / level</option>
+              <option value="">Select level</option>
               <option>Class 1 – 5</option>
               <option>Class 6 – 8</option>
               <option>Class 9 – 10</option>
@@ -569,22 +860,18 @@
               <option>College / Graduate</option>
             </select>
           </div>
-        </div>
-        <div class="form-group">
-          <label>Course Interested In *</label>
-          <select id="f-course">
-            <option value="">Select a course</option>
-            <option>School Coaching (1–12)</option>
-            <option>Spoken English</option>
-            <option>IELTS Coaching</option>
-            <option>CTET Preparation (Paper I &amp; II)</option>
-            <option>D.El.Ed Support</option>
-            <option>Personalised Tutoring</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Phone Number *</label>
-          <input type="tel" placeholder="+91 XXXXX XXXXX" id="f-phone" />
+          <div class="form-group">
+            <label>Course Interested In *</label>
+            <select id="f-course">
+              <option value="">Select a course</option>
+              <option>School Coaching (1–12)</option>
+              <option>Spoken English</option>
+              <option>IELTS Coaching</option>
+              <option>CTET Preparation (Paper I &amp; II)</option>
+              <option>D.El.Ed Support</option>
+              <option>Personalised Tutoring</option>
+            </select>
+          </div>
         </div>
         <div class="form-group">
           <label>Message (Optional)</label>
@@ -593,8 +880,9 @@
         <button class="btn-submit" onclick="submitForm()">Submit Enquiry →</button>
       </div>
       <div class="success-msg" id="success-msg">
-        ✅ Enquiry Received!<br>
-        <span style="font-size:0.88rem;opacity:0.75;">Thank you. Our team will contact you within 24 hours to discuss your enrollment at Learn Academy Dalkhola.</span>
+        <div class="success-icon">✅</div>
+        <h4>Enquiry Received!</h4>
+        <p>Thank you. Our team will contact you within 24 hours to discuss your enrollment at Learn Academy Dalkhola.</p>
       </div>
     </div>
   </div>
@@ -608,7 +896,7 @@
         <div class="logo-icon">L</div>
         <div class="logo-text">Learn Academy <span>Dalkhola</span></div>
       </div>
-      <p class="footer-desc">Quality coaching for Classes 1–12, Spoken English, IELTS, UGC NET, CTET, and D.El.Ed in the heart of North Dinajpur, West Bengal.</p>
+      <p class="footer-desc">Quality coaching for Classes 1–12, Spoken English, IELTS, CTET, and D.El.Ed in the heart of North Dinajpur, West Bengal.</p>
     </div>
     <div class="footer-col">
       <h5>Navigate</h5>
@@ -616,6 +904,8 @@
         <li><a href="#home">Home</a></li>
         <li><a href="#about">About Us</a></li>
         <li><a href="#courses">Courses</a></li>
+        <li><a href="#testimonials">Reviews</a></li>
+        <li><a href="#faq">FAQ</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
     </div>
@@ -627,6 +917,7 @@
         <li><a href="#courses">IELTS Coaching</a></li>
         <li><a href="#courses">CTET Preparation</a></li>
         <li><a href="#courses">D.El.Ed Support</a></li>
+        <li><a href="#courses">Personalised Tutoring</a></li>
       </ul>
     </div>
   </div>
@@ -636,24 +927,63 @@
 </footer>
 
 <script>
-  // Scroll reveal
+  /* ── Sticky nav shadow ── */
+  window.addEventListener('scroll', () => {
+    document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 20);
+  });
+
+  /* ── Mobile menu ── */
+  function toggleMenu() {
+    document.getElementById('mobile-menu').classList.toggle('open');
+  }
+
+  /* ── Scroll reveal ── */
   const reveals = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver(entries => {
+  const revealObs = new IntersectionObserver(entries => {
     entries.forEach((e, i) => {
       if (e.isIntersecting) {
-        setTimeout(() => e.target.classList.add('visible'), i * 80);
-        observer.unobserve(e.target);
+        setTimeout(() => e.target.classList.add('visible'), i * 90);
+        revealObs.unobserve(e.target);
       }
     });
-  }, { threshold: 0.1 });
-  reveals.forEach(el => observer.observe(el));
+  }, { threshold: 0.08 });
+  reveals.forEach(el => revealObs.observe(el));
 
-  // Form submit
+  /* ── Testimonial slider ── */
+  let testiOffset = 0;
+  function getVisible() {
+    if (window.innerWidth >= 1024) return 3;
+    if (window.innerWidth >= 640) return 2;
+    return 1;
+  }
+  function slideTestis(dir) {
+    const track = document.getElementById('testi-track');
+    const cards = track.children.length;
+    const visible = getVisible();
+    const max = cards - visible;
+    testiOffset = Math.min(Math.max(testiOffset + dir, 0), max);
+    const pct = (100 / visible) * testiOffset;
+    track.style.transform = `translateX(-${pct}%)`;
+    track.style.transition = 'transform 0.45s cubic-bezier(0.4,0,0.2,1)';
+  }
+
+  /* ── FAQ accordion ── */
+  function toggleFaq(el) {
+    const item = el.parentElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+
+  /* ── Enquiry form ── */
   function submitForm() {
     const name = document.getElementById('f-name').value.trim();
     const course = document.getElementById('f-course').value;
     const phone = document.getElementById('f-phone').value.trim();
-    if (!name || !course || !phone) { alert('Please fill in the required fields (Name, Course, Phone).'); return; }
+    if (!name || !course || !phone) {
+      alert('Please fill in the required fields: Name, Course, and Phone Number.');
+      return;
+    }
     document.getElementById('enquiry-fields').style.display = 'none';
     document.getElementById('success-msg').style.display = 'block';
   }
